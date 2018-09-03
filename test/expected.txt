@@ -61,7 +61,10 @@
 || 
 || list: Displays all persons as a list with index numbers.
 || 	Example: list
-|| 
+||
+|| total: totals up all persons in the addressbook.
+|| 	Example: total
+||
 || delete: Deletes a person identified by the index number used in the last find/list call.
 || 	Parameters: INDEX
 || 	Example: delete 1
@@ -170,6 +173,9 @@
 || 	5. Esther Potato  Phone Number: 555555  Email: esther@notreal.potato
 || 
 || 5 persons found!
+|| ===================================================
+|| Enter command: || [Command entered:  total]
+|| There are 5 persons in your AddressBook.
 || ===================================================
 || Enter command: || [Command entered:  find]
 || 

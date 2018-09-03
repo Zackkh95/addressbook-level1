@@ -115,6 +115,10 @@ public class AddressBook {
     private static final String COMMAND_LIST_DESC = "Displays all persons as a list with index numbers.";
     private static final String COMMAND_LIST_EXAMPLE = COMMAND_LIST_WORD;
 
+    private static final String COMMAND_TOTAL_WORD = "total";
+    private static final String COMMAND_TOTAL_DESC = "Totals up persons in the addressbook.";
+    private static final String COMMAND_TOTAL_EXAMPLE = COMMAND_TOTAL_WORD;
+
     private static final String COMMAND_DELETE_WORD = "delete";
     private static final String COMMAND_DELETE_DESC = "Deletes a person identified by the index number used in "
                                                     + "the last find/list call.";
@@ -375,6 +379,8 @@ public class AddressBook {
             return executeFindPersons(commandArgs);
         case COMMAND_LIST_WORD:
             return executeListAllPersonsInAddressBook();
+            case COMMAND_TOTAL_WORD:
+                return executeTotalAllPersonsInAddressbook();
         case COMMAND_DELETE_WORD:
             return executeDeletePerson(commandArgs);
         case COMMAND_CLEAR_WORD:
@@ -385,6 +391,7 @@ public class AddressBook {
             executeExitProgramRequest();
         default:
             return getMessageForInvalidCommandInput(commandType, getUsageInfoForAllCommands());
+
         }
     }
 
@@ -464,6 +471,16 @@ public class AddressBook {
      */
     private static String getMessageForPersonsDisplayedSummary(ArrayList<String[]> personsDisplayed) {
         return String.format(MESSAGE_PERSONS_FOUND_OVERVIEW, personsDisplayed.size());
+    }
+
+    /** Constructs a feedback message to summarise an operation that totals up number of persons in the
+     * address book
+     * @param num pass in number of person
+     * @return summary message for total number of persons summary
+     *
+     */
+    private static String getMessageForTotalPersonsCounted(int num){
+        return "There are " + ALL_PERSONS.size() + " persons in your AddressBook.";
     }
 
     /**
@@ -577,6 +594,16 @@ public class AddressBook {
         ArrayList<String[]> toBeDisplayed = getAllPersonsInAddressBook();
         showToUser(toBeDisplayed);
         return getMessageForPersonsDisplayedSummary(toBeDisplayed);
+    }
+
+    /**
+     * Display the total number of persons in the addressbook to the user, in added order.
+     *
+     * @return feedback display message for the operation result
+     */
+
+    private static String executeTotalAllPersonsInAddressbook() {
+        return getMessageForTotalPersonsCounted(ALL_PERSONS.size());
     }
 
     /**
@@ -989,7 +1016,7 @@ public class AddressBook {
 
         // phone is last arg, target is from prefix to end of string
         if (indexOfPhonePrefix > indexOfEmailPrefix) {
-            return removePrefixSign(encoded.substring(indexOfPhonePrefix, encoded.length()).trim(),
+            return removePrefixSign(encoded.substring(indexOfPhonePrefix).trim(),
                     PERSON_DATA_PREFIX_PHONE);
 
         // phone is middle arg, target is from own prefix to next prefix
@@ -1012,7 +1039,7 @@ public class AddressBook {
 
         // email is last arg, target is from prefix to end of string
         if (indexOfEmailPrefix > indexOfPhonePrefix) {
-            return removePrefixSign(encoded.substring(indexOfEmailPrefix, encoded.length()).trim(),
+            return removePrefixSign(encoded.substring(indexOfEmailPrefix).trim(),
                     PERSON_DATA_PREFIX_EMAIL);
 
         // email is middle arg, target is from own prefix to next prefix
@@ -1086,6 +1113,7 @@ public class AddressBook {
                 + getUsageInfoForFindCommand() + LS
                 + getUsageInfoForViewCommand() + LS
                 + getUsageInfoForDeleteCommand() + LS
+                + getUsageInfoForTotalCommand() + LS
                 + getUsageInfoForClearCommand() + LS
                 + getUsageInfoForExitCommand() + LS
                 + getUsageInfoForHelpCommand();
@@ -1123,6 +1151,13 @@ public class AddressBook {
         return String.format(MESSAGE_COMMAND_HELP, COMMAND_LIST_WORD, COMMAND_LIST_DESC) + LS
                 + String.format(MESSAGE_COMMAND_HELP_EXAMPLE, COMMAND_LIST_EXAMPLE) + LS;
     }
+
+    /** Returns the string for showing 'total' command usage instruction */
+    private static String getUsageInfoForTotalCommand() {
+        return String.format(MESSAGE_COMMAND_HELP, COMMAND_TOTAL_WORD, COMMAND_TOTAL_DESC) + LS
+                + String.format(MESSAGE_COMMAND_HELP_EXAMPLE, COMMAND_TOTAL_EXAMPLE) + LS;
+    }
+
 
     /** Returns string for showing 'help' command usage instruction */
     private static String getUsageInfoForHelpCommand() {
